@@ -1,0 +1,20 @@
+{
+    "keyboard_name": "test_split",
+    "url": "",
+    "maintainer": "Putra Sattvika",
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+                {"label": "kl_00", "x": 0, "y": 0},
+                {"label": "kl_01", "x": 1, "y": 0},
+                {"label": "kl_10", "x": 0, "y": 1},
+                {"label": "kl_11", "x": 1, "y": 1},
+
+                {"label": "kr_00", "x": 2, "y": 0},
+                {"label": "kr_01", "x": 3, "y": 0},
+                {"label": "kr_10", "x": 2, "y": 1},
+                {"label": "kr_11", "x": 3, "y": 1}
+            ]
+        }
+    }
+}

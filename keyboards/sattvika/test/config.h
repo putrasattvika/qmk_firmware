@@ -24,11 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT_ID   0x0000
 #define DEVICE_VER   0x0001
 #define MANUFACTURER Putra Sattvika
-#define PRODUCT      sttv_test
+#define PRODUCT      test
 
 /* key matrix size */
 #define MATRIX_ROWS 2
-#define MATRIX_COLS 3
+#define MATRIX_COLS 2
 
 /*
  * Keyboard Matrix Assignments
@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 #define MATRIX_ROW_PINS { B4, B5 }
-#define MATRIX_COL_PINS { B3, B2, B6 }
+#define MATRIX_COL_PINS { B3, B2 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL */
