@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "matrix.h"
-#include "print.h"
+// #include "print.h"
 
 __attribute__((weak)) void matrix_init_kb(void) { matrix_init_user(); }
 
@@ -31,13 +31,13 @@ void matrix_init(void) {
 uint8_t matrix_scan(void) {
     bool changed = false;
 
-    static uint32_t call_cnt = 0;
-    call_cnt++;
+    // static uint32_t call_cnt = 0;
+    // call_cnt++;
 
-    if (call_cnt % 100000 == 0) {
-        printf("matrix_scan() (cnt=%ld)\n", call_cnt);
-        call_cnt = 0;
-    }
+    // if (call_cnt % 100000 == 0) {
+    //     printf("matrix_scan() (cnt=%ld)\n", call_cnt);
+    //     call_cnt = 0;
+    // }
 
     // TODO: add matrix scanning routine here
 

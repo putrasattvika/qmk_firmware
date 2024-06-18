@@ -8,9 +8,9 @@
 #include "hal.h"
 // #include "chmboxes.h"
 
-// #include "print.h"
+#include "print.h"
 
-// #include "ledc.h"
+#include "ledc.h"
 // #include "cmailbox.h"
 
 #include "cusb_host.h"
@@ -42,6 +42,16 @@ static THD_FUNCTION(keycode_consumer, arg) {
     while (true) {
         cusb_host_print_keycodes();
         chThdSleepMilliseconds(50);
+    }
+}
+
+static THD_WORKING_AREA(wa_blinker, 2048);
+static THD_FUNCTION(blinker, arg) {
+    while (true) {
+        printf("core1 healthcheck: OK\n");
+        blink_for(200);
+
+        chThdSleepMilliseconds(800);
     }
 }
 
@@ -95,6 +105,8 @@ void c1_main(void) {
     chInstanceObjectInit(&ch1, &ch_core1_cfg);
     chSysUnlock();
 
+    blink_init();
+
     // USB host stack uses PIO and DMA
     hal_lld_peripheral_unreset(RESETS_ALLREG_PIO0);
     hal_lld_peripheral_unreset(RESETS_ALLREG_PIO1);
@@ -111,6 +123,11 @@ void c1_main(void) {
     chThdCreateStatic(
         wa_keycode_consumer, sizeof(wa_keycode_consumer), NORMALPRIO + 1,
         keycode_consumer, NULL
+    );
+
+    chThdCreateStatic(
+        wa_blinker, sizeof(wa_blinker), NORMALPRIO + 1,
+        blinker, NULL
     );
 
     // chThdCreateStatic(

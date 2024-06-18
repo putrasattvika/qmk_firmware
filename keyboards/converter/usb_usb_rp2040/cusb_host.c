@@ -2,28 +2,38 @@
 #include "pico/stdlib.h"
 
 #include "pio_usb.h"
+// #include "tusb.h"
 
 #include "print.h"
 
 #include "cusb_host.h"
 
 static usb_device_t *usb_device = NULL;
+static bool initialized = false;
 
 void cusb_host_init(uint8_t pin_dp) {
     static pio_usb_configuration_t config = PIO_USB_DEFAULT_CONFIG;
     config.pin_dp = pin_dp;
     config.skip_alarm_pool = true;
 
-    // config.alarm_pool = (void*)alarm_pool_create(2, 1);
-
     usb_device = pio_usb_host_init(&config);
+
+    initialized = true;
 }
 
 void cusb_host_task(void) {
+    if (!initialized) {
+        return;
+    }
+
     pio_usb_host_task();
 }
 
 void cusb_host_sof_timer_task(void) {
+    if (!initialized) {
+        return;
+    }
+
     pio_usb_host_frame();
 }
 
