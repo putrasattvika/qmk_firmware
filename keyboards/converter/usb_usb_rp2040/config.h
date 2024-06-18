@@ -3,6 +3,8 @@
 
 #pragma once
 
+#define PICO_ON_DEVICE 1
+
 /*
  * Size of the virtual matrix
  */

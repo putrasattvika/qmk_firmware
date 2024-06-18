@@ -1,0 +1,83 @@
+diff --git a/src/pio_usb_host.c b/src/pio_usb_host.c
+index ae65a4a..fdd2ba0 100644
+--- a/src/pio_usb_host.c
++++ b/src/pio_usb_host.c
+@@ -20,7 +20,7 @@
+ #include "usb_tx.pio.h"
+
+ static alarm_pool_t *_alarm_pool = NULL;
+-static repeating_timer_t sof_rt;
++// static repeating_timer_t sof_rt;
+ // The sof_count may be incremented and then read on different cores.
+ static volatile uint32_t sof_count = 0;
+ static bool timer_active;
+@@ -29,7 +29,7 @@ static volatile bool cancel_timer_flag;
+ static volatile bool start_timer_flag;
+ static __unused uint32_t int_stat;
+
+-static bool sof_timer(repeating_timer_t *_rt);
++// static bool sof_timer(repeating_timer_t *_rt);
+
+ //--------------------------------------------------------------------+
+ // Application API
+@@ -40,16 +40,16 @@ static void start_timer(alarm_pool_t *alarm_pool) {
+     return;
+   }
+
+-  if (alarm_pool != NULL) {
+-    alarm_pool_add_repeating_timer_us(alarm_pool, -1000, sof_timer, NULL,
+-                                      &sof_rt);
+-  }
++  // if (alarm_pool != NULL) {
++  //   alarm_pool_add_repeating_timer_us(alarm_pool, -1000, sof_timer, NULL,
++  //                                     &sof_rt);
++  // }
+
+   timer_active = true;
+ }
+
+ static __unused void stop_timer(void) {
+-  cancel_repeating_timer(&sof_rt);
++  // cancel_repeating_timer(&sof_rt);
+   timer_active = false;
+ }
+
+@@ -75,12 +75,13 @@ usb_device_t *pio_usb_host_init(const pio_usb_configuration_t *c) {
+                                   &pp->clk_div_ls_rx.div_int,
+                                   &pp->clk_div_ls_rx.div_frac);
+
+-  if (!c->skip_alarm_pool) {
+-    _alarm_pool = c->alarm_pool;
+-    if (!_alarm_pool) {
+-      _alarm_pool = alarm_pool_create(2, 1);
+-    }
+-  }
++  // if (!c->skip_alarm_pool) {
++  //   _alarm_pool = c->alarm_pool;
++  //   if (!_alarm_pool) {
++  //     _alarm_pool = alarm_pool_create(2, 1);
++  //   }
++  // }
++
+   start_timer(_alarm_pool);
+
+   return &pio_usb_device[0];
+@@ -309,13 +310,13 @@ void __not_in_flash_func(pio_usb_host_frame)(void) {
+   sof_packet[3] = (calc_usb_crc5(sof_count_11b) << 3) | (sof_count_11b >> 8);
+ }
+
+-static bool __no_inline_not_in_flash_func(sof_timer)(repeating_timer_t *_rt) {
+-  (void)_rt;
++// static bool __no_inline_not_in_flash_func(sof_timer)(repeating_timer_t *_rt) {
++//   (void)_rt;
+
+-  pio_usb_host_frame();
++//   pio_usb_host_frame();
+
+-  return true;
+-}
++//   return true;
++// }
+
+ //--------------------------------------------------------------------+
+ // Host Controller functions
