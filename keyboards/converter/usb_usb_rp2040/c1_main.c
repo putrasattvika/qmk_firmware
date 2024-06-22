@@ -22,23 +22,14 @@ void start_sof_timer(void) {
 }
 
 // Main thread for core1
-static THD_WORKING_AREA(wa_c1_main_task_wrapper, 2048);
-static THD_FUNCTION(c1_main_task_wrapper, arg) {
+static THD_WORKING_AREA(wa_c1_main_task, 2048);
+static THD_FUNCTION(c1_main_task, arg) {
     cusb_host_init(18);
     start_sof_timer();
 
     while (true) {
         cusb_host_task();
         chThdSleepMicroseconds(125);
-    }
-}
-
-static THD_WORKING_AREA(wa_blinker, 2048);
-static THD_FUNCTION(blinker, arg) {
-    while (true) {
-        blink_for(200);
-
-        chThdSleepMilliseconds(800);
     }
 }
 
@@ -57,12 +48,7 @@ void c1_main(void) {
 
     // Start main task
     chThdCreateStatic(
-        wa_c1_main_task_wrapper, sizeof(wa_c1_main_task_wrapper), NORMALPRIO + 1,
-        c1_main_task_wrapper, NULL
-    );
-
-    chThdCreateStatic(
-        wa_blinker, sizeof(wa_blinker), NORMALPRIO + 1,
-        blinker, NULL
+        wa_c1_main_task, sizeof(wa_c1_main_task), NORMALPRIO + 1,
+        c1_main_task, NULL
     );
 }

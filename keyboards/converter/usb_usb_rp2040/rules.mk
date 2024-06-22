@@ -10,6 +10,7 @@ OPT_DEFS += -Wno-unused-function
 CUSTOM_MATRIX = yes
 SRC += c1_main.c
 SRC += pico_sdk_mock.c
+SRC += uu_common.c
 SRC += ledc.c cusb_host.c
 SRC += keyboard.c matrix.c
 

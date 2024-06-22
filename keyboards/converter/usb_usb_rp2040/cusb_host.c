@@ -1,9 +1,11 @@
 #include "pio_usb.h"
 #include "tusb.h"
 
-#include "print.h"
+#include "debug.h"
 #include "cusb_host.h"
+#include "usb_usb_rp2040/uu_common.h"
 
+extern hid_keyboard_report_t matrix_kb_report;
 static bool initialized = false;
 
 void cusb_host_init(uint8_t pin_dp) {
@@ -33,33 +35,11 @@ void cusb_host_sof_timer_task(void) {
     pio_usb_host_frame();
 }
 
-void cusb_host_print_keycodes(void) {}
-
-static inline bool reports_identical(
-    hid_keyboard_report_t const *report_a,
-    hid_keyboard_report_t const *report_b
-) {
-    if (report_a->modifier != report_b->modifier) {
-        return false;
-    }
-
-    for(uint8_t i = 0; i < 6; i++) {
-        if (report_a->keycode[i] != report_b->keycode[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 static void process_kbd_report(uint8_t dev_addr, hid_keyboard_report_t const *report) {
     (void) dev_addr;
 
-    // previous report to check key release
-    static hid_keyboard_report_t prev_report = { 0, 0, {0} };
-
-    if (!reports_identical(&prev_report, report)) {
-        printf(
+    if (!hid_keyboard_reports_identical(&matrix_kb_report, report)) {
+        dprintf(
             "[%u] Report: %02x | %02x %02x %02x %02x %02x %02x\n",
             dev_addr,
             report->modifier,
@@ -72,17 +52,17 @@ static void process_kbd_report(uint8_t dev_addr, hid_keyboard_report_t const *re
         );
     }
 
-    prev_report = *report;
+    matrix_kb_report = *report;
 }
 
 void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_report, uint16_t desc_len) {
-    printf("[%02x] HID mounted: addr=%02x instance=%02x\n", dev_addr, dev_addr, instance);
+    dprintf("[%02x] HID mounted: addr=%02x instance=%02x\n", dev_addr, dev_addr, instance);
 
     for (int instance = 0; instance < tuh_hid_instance_count(dev_addr); instance++) {
         tuh_hid_receive_report(dev_addr, instance);
 
         if (tuh_hid_interface_protocol(dev_addr, instance) == HID_ITF_PROTOCOL_KEYBOARD) {
-            printf("[%02x] Found keyboard HID: addr=%02x instance=%02x\n", dev_addr, dev_addr, instance);
+            dprintf("[%02x] Found keyboard HID: addr=%02x instance=%02x\n", dev_addr, dev_addr, instance);
         }
     }
 }
@@ -94,7 +74,7 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
 
     switch(itf_protocol) {
         case HID_ITF_PROTOCOL_KEYBOARD:
-            printf("[%02x] Keyboard HID report received from instance=%02x\n", dev_addr, instance);
+            dprintf("[%02x] Keyboard HID report received from instance=%02x\n", dev_addr, instance);
             process_kbd_report(dev_addr, (hid_keyboard_report_t const*) report );
 
             break;
