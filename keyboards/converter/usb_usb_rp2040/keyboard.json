@@ -2,21 +2,24 @@
     "manufacturer": "QMK",
     "keyboard_name": "USB to USB Converter",
     "maintainer": "putrasattvika",
-    "bootloader": "rp2040",
+
     "features": {
         "bootmagic": false,
         "command": true,
-        "console": true,
+        "console": false,
         "extrakey": true,
         "mousekey": false,
         "nkro": false
     },
+
     "processor": "RP2040",
+    "bootloader": "rp2040",
     "usb": {
-        "device_version": "1.0.0",
-        "pid": "0x0000",
-        "vid": "0xFEED"
+        "vid": "0xFFFE",
+        "pid": "0x005B",
+        "device_version": "1.0.0"
     },
+
     "layouts": {
         "LAYOUT_all": {
             "layout": [
