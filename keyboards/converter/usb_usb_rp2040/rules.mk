@@ -1,5 +1,7 @@
 # Adapted from https://github.com/qmk/qmk_firmware/pull/20999/files#diff-a4cf8cf8185c9432397cafdc9fb1bc1abb2e67169cb09ebcd5f402573d8cb845
 
+# $(info Keyboard = $(KEYBOARD))
+
 # Hardware
 OPT_DEFS += -DCRT0_EXTRA_CORES_NUMBER=1
 OPT_DEFS += -Wno-unused-function
@@ -7,6 +9,7 @@ OPT_DEFS += -Wno-unused-function
 # Keyboard
 CUSTOM_MATRIX = yes
 SRC += c1_main.c
+SRC += pico_sdk_mock.c
 SRC += ledc.c cusb_host.c
 SRC += keyboard.c matrix.c
 
