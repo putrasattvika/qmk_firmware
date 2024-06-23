@@ -35,9 +35,11 @@ static THD_FUNCTION(c1_main_task, arg) {
 
 // Entry point of core1, the function name is hardcoded in chibios
 void c1_main(void) {
-    chSysWaitSystemState(ch_sys_running);
-    chInstanceObjectInit(&ch1, &ch_core1_cfg);
-    chSysUnlock();
+    if (chThdGetSelfX()->owner->core_id == 1) {
+        chSysWaitSystemState(ch_sys_running);
+        chInstanceObjectInit(&ch1, &ch_core1_cfg);
+        chSysUnlock();
+    }
 
     blink_init();
 

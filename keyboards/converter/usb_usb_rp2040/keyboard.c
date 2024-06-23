@@ -7,9 +7,12 @@
 
 #include "debug.h"
 #include "keyboard.h"
+#include "converter/usb_usb_rp2040/c1_main.h"
 
 void keyboard_pre_init_kb(void) {
     set_sys_clock_khz(120000, true);
+
+    c1_main();
 }
 
 void keyboard_post_init_user(void) {

@@ -3,7 +3,7 @@
 # $(info Keyboard = $(KEYBOARD))
 
 # Hardware
-OPT_DEFS += -DCRT0_EXTRA_CORES_NUMBER=1
+# OPT_DEFS += -DCRT0_EXTRA_CORES_NUMBER=1
 OPT_DEFS += -Wno-unused-function
 
 # Keyboard
