@@ -14,8 +14,19 @@ static void usb_host_sof_timer_cb(virtual_timer_t *_vt, void *_) {
     pio_usb_host_frame();
 }
 
-static THD_WORKING_AREA(wa_usb_host_setup, 2048);
-static THD_FUNCTION(usb_host_setup, arg) {
+// Continuation of keyboard_pre_init_kb(). Has to be defined in a separate file
+// as pico/stdlib.h cannot be included in the same file as ChibiOS.
+void c1_main(void) {
+    chSysWaitSystemState(ch_sys_running);
+    chInstanceObjectInit(&ch1, &ch_core1_cfg);
+    chSysUnlock();
+
+    // Pico-PIO-USB host stack uses both PIOs and DMA
+    hal_lld_peripheral_unreset(RESETS_ALLREG_PIO0);
+    hal_lld_peripheral_unreset(RESETS_ALLREG_PIO1);
+    hal_lld_peripheral_unreset(RESETS_ALLREG_DMA);
+
+    // Start the USB host task
     pio_usb_configuration_t config = PIO_USB_DEFAULT_CONFIG;
     config.pin_dp = USB_DEVICE_DATAPLUS_PIN;
     config.skip_alarm_pool = true;
@@ -30,22 +41,4 @@ static THD_FUNCTION(usb_host_setup, arg) {
         tuh_task();
         chThdSleepMicroseconds(125);
     }
-}
-
-// Continuation of keyboard_pre_init_kb(). Has to be defined in a separate file
-// as pico/stdlib.h cannot be included in the same file as ChibiOS.
-void keyboard_pre_init_kb_2(void) {
-    // Pico-PIO-USB host stack uses both PIOs and DMA
-    hal_lld_peripheral_unreset(RESETS_ALLREG_PIO0);
-    hal_lld_peripheral_unreset(RESETS_ALLREG_PIO1);
-    hal_lld_peripheral_unreset(RESETS_ALLREG_DMA);
-
-    // Start the USB host thread
-    //
-    // HACK: ideally this should be run in core1 instead, but that seems to
-    // cause a crash when Via keymaps are written to flash
-    chThdCreateStatic(
-        wa_usb_host_setup, sizeof(wa_usb_host_setup), NORMALPRIO + 1,
-        usb_host_setup, NULL
-    );
 }

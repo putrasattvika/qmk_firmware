@@ -11,6 +11,7 @@
 //   - USB Data+ pin to GPIO0
 //   - USB Data- pin to GPIO1
 #define USB_DEVICE_DATAPLUS_PIN 0
+// #define USB_DEVICE_DATAPLUS_PIN 18
 
 // Size of the virtual matrix
 #define MATRIX_ROWS 16

@@ -13,7 +13,7 @@ void keyboard_pre_init_kb(void) {
     // See https://github.com/sekigon-gonnoc/Pico-PIO-USB/blob/0.5.3/examples/capture_hid_report/capture_hid_report.c#L31-L32
     set_sys_clock_khz(120000, true);
 
-    keyboard_pre_init_kb_2();
+    // keyboard_pre_init_kb_2();
 
     keyboard_pre_init_user();
 }
